@@ -11,7 +11,7 @@ const LoginPage = () => {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3001/login", {
+            const response = await fetch("https://apidoubts.dev.vilhena.ifro.edu.br/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

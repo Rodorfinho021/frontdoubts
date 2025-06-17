@@ -32,7 +32,7 @@ const CriarCanais = () => {
     formData.append('descricao', descricao);
 
     try {
-      await axios.post('http://localhost:3001/_cadastrar_canal', formData, {
+      await axios.post('https://apidoubts.dev.vilhena.ifro.edu.br/_cadastrar_canal', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           Authorization: `Bearer ${localStorage.getItem("token")}`,

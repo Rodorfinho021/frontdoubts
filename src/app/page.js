@@ -25,7 +25,7 @@ export default function Canais() {
 
   const fetchCanais = async () => {
     try {
-      const response = await fetch("http://localhost:3001/canais");
+      const response = await fetch("https://apidoubts.dev.vilhena.ifro.edu.br/canais");
       const data = await response.json();
       setCanais(data);
     } catch (err) {
@@ -51,7 +51,7 @@ export default function Canais() {
   const getImagemUrl = (imagem) =>
     imagem && imagem.trim() !== ""
       ? imagem
-      : "http://localhost:3001/uploads/default.png";
+      : "https://apidoubts.dev.vilhena.ifro.edu.br/uploads/default.png";
 
   return (
     <div className={styles.body}>
@@ -131,7 +131,7 @@ export default function Canais() {
                   width={200}
                   height={200}
                   onError={(e) =>
-                    (e.target.src = "http://localhost:3000/uploads/default.png")
+                    (e.target.src = "https://apidoubts.dev.vilhena.ifro.edu.br/uploads/default.png")
                   }
                   className={styles.imgCar}
                 />
@@ -160,7 +160,7 @@ export default function Canais() {
                   width={200}
                   height={200}
                   onError={(e) =>
-                    (e.target.src = "http://localhost:3000/uploads/default.png")
+                    (e.target.src = "https://apidoubts.dev.vilhena.ifro.edu.br/uploads/default.png")
                   }
                   className={styles.imgCar}
                 />

@@ -31,7 +31,7 @@ const MinhaConta = () => {
 
     async function fetchFotoPerfil() {
       try {
-        const response = await fetch(`http://localhost:3001/perfil/${user.id}`, {
+        const response = await fetch(`https://apidoubts.dev.vilhena.ifro.edu.br/perfil/${user.id}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ const MinhaConta = () => {
     formData.append('userId', user.id);
 
     try {
-      const response = await axios.post('http://localhost:3001/upload', formData, {
+      const response = await axios.post('https://apidoubts.dev.vilhena.ifro.edu.br/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
