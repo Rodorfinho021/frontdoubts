@@ -107,7 +107,7 @@ const MinhaConta = () => {
     <div className={styles.container}>
       <div className={styles.card}>
         <img
-          src={preview || fotoFinalUrl || '/default_user'} // Preview ou foto do banco, ou imagem padrão
+          src={preview || fotoFinalUrl || '/rafaela.png'} // Preview ou foto do banco, ou imagem padrão
           alt="Foto de perfil"
           className={styles.profileImage}
         />
