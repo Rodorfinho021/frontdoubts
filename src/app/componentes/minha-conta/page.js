@@ -90,6 +90,7 @@ const MinhaConta = () => {
       setPreview(null);
     } catch (error) {
       alert('Erro ao enviar a imagem');
+      console.log(error)
     }
   };
 
