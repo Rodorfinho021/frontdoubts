@@ -44,14 +44,14 @@ const MinhaConta = () => {
         }
 
         const data = await response.json();
-        setFotoUrl(data.url); // Corrigido: usa o campo 'url' que o backend mandou
+        setFotoUrl(data.url);
       } catch (error) {
         console.error('Erro ao carregar foto:', error);
       }
     }
 
     fetchFotoPerfil();
-  }, [user]); // Agora depende do user
+  }, [user]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -70,28 +70,29 @@ const MinhaConta = () => {
     formData.append('imagem', file);
     formData.append('userId', user.id);
 
-    try {
-      const response = await axios.post('https://apidoubts.dev.vilhena.ifro.edu.br/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
+    const response = await axios.post('https://apidoubts.dev.vilhena.ifro.edu.br/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      withCredentials: true,
+    });
 
-      const data = response.data;
+    const data = response.data;
 
-      const updatedUser = { ...user, foto: data.url };
-      localStorage.setItem('user', JSON.stringify(updatedUser));
-      setUser(updatedUser);
-      setImgTimestamp(Date.now()); // Atualiza o timestamp para forçar atualizar imagem
-
-      alert('Foto atualizada com sucesso!');
-      setFile(null);
-      setPreview(null);
-    } catch (error) {
-      alert('Erro ao enviar a imagem');
-      console.log(error)
+    if (!data.url) {
+      alert('Upload feito, mas não recebemos a URL da imagem.');
+      console.log('Resposta da API:', data);
+      return;
     }
+
+    // Atualiza usuário localmente antes do reload (opcional)
+    const updatedUser = { ...user, foto: data.url };
+    localStorage.setItem('user', JSON.stringify(updatedUser));
+    setUser(updatedUser);
+    setImgTimestamp(Date.now());
+
+    alert('Foto atualizada com sucesso!');
+
+    // Força reload da página aqui
+    window.location.reload();
   };
 
   const handleLogout = () => {
@@ -108,7 +109,7 @@ const MinhaConta = () => {
     <div className={styles.container}>
       <div className={styles.card}>
         <img
-          src={preview || fotoFinalUrl || '/rafaela.png'} // Preview ou foto do banco, ou imagem padrão
+          src={preview || fotoFinalUrl }
           alt="Foto de perfil"
           className={styles.profileImage}
         />
@@ -127,7 +128,11 @@ const MinhaConta = () => {
             />
           )}
           <br />
-          <button type="submit" style={{ marginTop: '10px' }}>Enviar nova foto</button>
+          {file && (
+            <button type="submit" style={{ marginTop: '10px' }}>
+              Enviar nova foto
+            </button>
+          )}
         </form>
 
         <button
