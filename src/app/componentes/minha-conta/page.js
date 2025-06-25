@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import styles from './page.module.css';
 import axios from 'axios';
 
@@ -10,6 +10,7 @@ const MinhaConta = () => {
   const [preview, setPreview] = useState(null);
   const [fotoUrl, setFotoUrl] = useState(null);
   const [imgTimestamp, setImgTimestamp] = useState(Date.now());
+  const fileInputRef = useRef(null); // REF para limpar o input
 
   const loadUserFromLocalStorage = () => {
     const token = localStorage.getItem('token');
@@ -44,14 +45,14 @@ const MinhaConta = () => {
         }
 
         const data = await response.json();
-        setFotoUrl(data.url); // Corrigido: usa o campo 'url' que o backend mandou
+        setFotoUrl(data.url);
       } catch (error) {
         console.error('Erro ao carregar foto:', error);
       }
     }
 
     fetchFotoPerfil();
-  }, [user]); // Agora depende do user
+  }, [user]);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -83,11 +84,12 @@ const MinhaConta = () => {
       const updatedUser = { ...user, foto: data.url };
       localStorage.setItem('user', JSON.stringify(updatedUser));
       setUser(updatedUser);
-      setImgTimestamp(Date.now()); // Atualiza o timestamp para forçar atualizar imagem
+      setImgTimestamp(Date.now());
 
       alert('Foto atualizada com sucesso!');
       setFile(null);
       setPreview(null);
+      fileInputRef.current.value = null; // Limpa o campo de input
     } catch (error) {
       alert('Erro ao enviar a imagem');
     }
@@ -100,33 +102,45 @@ const MinhaConta = () => {
   };
 
   if (!user) return null;
+  
 
-  const fotoFinalUrl = fotoUrl ? `${fotoUrl}?t=${imgTimestamp}` : null;
+
+ const fotoFinalUrl = fotoUrl && fotoUrl.trim() !== '' ? `${fotoUrl}?t=${imgTimestamp}` : '/default_user.png';
+
 
   return (
     <div className={styles.container}>
       <div className={styles.card}>
-        <img
-          src={preview || fotoFinalUrl || '/rafaela.png'} // Preview ou foto do banco, ou imagem padrão
-          alt="Foto de perfil"
-          className={styles.profileImage}
-        />
+      <img
+         src={preview || fotoFinalUrl}
+        alt="Foto de perfil"
+        className={styles.profileImage}
+      />
+
 
         <h2 className={styles.title}>Minha Conta</h2>
         <p><strong>Nome:</strong> {user.nome}</p>
         <p><strong>Email:</strong> {user.email}</p>
 
         <form onSubmit={handleUpload} style={{ marginTop: '20px' }}>
-          <input type="file" accept="image/*" onChange={handleFileChange} />
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            ref={fileInputRef}
+          />
+
           {preview && (
-            <img
-              src={preview}
-              alt="Preview"
-              style={{ maxWidth: '100px', marginTop: '10px', borderRadius: '8px' }}
-            />
+            <>
+              <img
+                src={preview}
+                alt="Preview"
+                style={{ maxWidth: '100px', marginTop: '10px', borderRadius: '8px' }}
+              />
+              <br />
+              <button type="submit" style={{ marginTop: '10px' }}>Enviar nova foto</button>
+            </>
           )}
-          <br />
-          <button type="submit" style={{ marginTop: '10px' }}>Enviar nova foto</button>
         </form>
 
         <button
