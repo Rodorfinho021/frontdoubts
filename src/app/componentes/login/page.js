@@ -16,8 +16,12 @@ try {
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ email, senha })
+        body: JSON.stringify({ email, senha }),
+        cache: "no-store",
+        
     });
+    console.log("Enviando dados para login:", { email, senha });
+
 
     const text = await response.text();
     let data;
