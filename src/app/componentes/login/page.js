@@ -1,53 +1,68 @@
 'use client'
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./page.module.css";
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [senha, setSenha] = useState("");
 
+    useEffect(() => {
+        setEmail("");
+        setSenha("");
+    }, []);
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-try {
-    const response = await fetch("https://apidoubts.dev.vilhena.ifro.edu.br/login", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ email, senha }),
-        cache: "no-store",
-        
-    });
-    console.log("Enviando dados para login:", { email, senha });
+        const form = e.target;
+        const emailValue = form.email.value.trim();
+        const senhaValue = form.senha.value.trim();
 
+        console.log("Valores enviados:", { emailValue, senhaValue });
 
-    const text = await response.text();
-    let data;
+        if (!emailValue || !senhaValue) {
+            alert("Preencha todos os campos.");
+            return;
+        }
 
-    try {
-        data = JSON.parse(text);
-    } catch (e) {
-        console.error("Resposta não era JSON:", text);
-        alert("Erro inesperado do servidor.");
-        return;
-    }
+        try {
+            const response = await fetch("https://apidoubts.dev.vilhena.ifro.edu.br/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: emailValue,
+                    senha: senhaValue
+                }),
+                cache: "no-store"
+            });
 
-    if (response.ok) {
-        localStorage.setItem("token", data.token);
-        localStorage.setItem("user", JSON.stringify(data.user));
-        alert("Login bem-sucedido!");
-        window.location.href = "/";
-    } else {
-        alert(data.mensagem || "Email ou senha inválidos.");
-    }
+            const text = await response.text();
+            let data;
 
-} catch (error) {
-    console.error("Erro na requisição:", error);
-    alert("Erro de conexão com o servidor.");
-}
+            try {
+                data = JSON.parse(text);
+            } catch (e) {
+                console.error("Resposta não era JSON:", text);
+                alert("Erro inesperado do servidor.");
+                return;
+            }
 
+            if (response.ok) {
+                localStorage.setItem("token", data.token);
+                localStorage.setItem("user", JSON.stringify(data.user));
+                alert("Login bem-sucedido!");
+                window.location.href = "/";
+            } else {
+                alert(data.mensagem || "Email ou senha inválidos.");
+            }
+
+        } catch (error) {
+            console.error("Erro na requisição:", error);
+            alert("Erro de conexão com o servidor.");
+        }
     };
 
     return (
