@@ -10,34 +10,40 @@ const LoginPage = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        try {
-            const response = await fetch("https://apidoubts.dev.vilhena.ifro.edu.br/login", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    email,
-                    senha
-                })
-            });
+try {
+    const response = await fetch("https://apidoubts.dev.vilhena.ifro.edu.br/login", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email, senha })
+    });
 
-            const data = await response.json();
+    const text = await response.text();
+    let data;
 
-            if (response.ok) {
-                // Salvando token e usuário no localStorage
-                localStorage.setItem("token", data.token);
-                localStorage.setItem("user", JSON.stringify(data.user));
+    try {
+        data = JSON.parse(text);
+    } catch (e) {
+        console.error("Resposta não era JSON:", text);
+        alert("Erro inesperado do servidor.");
+        return;
+    }
 
-                alert("Login bem-sucedido!");
-                window.location.href = "/"; // redirecionar para a home ou dashboard
-            } else {
-                alert(data.mensagem || "Email ou senha inválidos.");
-            }
-        } catch (error) {
-            console.error("Erro na requisição:", error);
-            alert("Erro de conexão com o servidor.");
-        }
+    if (response.ok) {
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("user", JSON.stringify(data.user));
+        alert("Login bem-sucedido!");
+        window.location.href = "/";
+    } else {
+        alert(data.mensagem || "Email ou senha inválidos.");
+    }
+
+} catch (error) {
+    console.error("Erro na requisição:", error);
+    alert("Erro de conexão com o servidor.");
+}
+
     };
 
     return (
