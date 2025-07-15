@@ -65,7 +65,10 @@ const handleSubmit = async (e) => {
 
     const canalCriado = response.data;
     localStorage.setItem("canalSelecionado", JSON.stringify(canalCriado));
-    router.push("https://apidoubts.dev.vilhena.ifro.edu.br/");
+    window.location.href = "https://doubts.dev.vilhena.ifro.edu.br/";
+
+
+    
     
     // Limpa campos
     setNomeCanal('');
