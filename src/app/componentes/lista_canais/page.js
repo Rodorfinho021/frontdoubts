@@ -262,13 +262,18 @@ useEffect(() => {
             <div key={index} className={styles.carde}>
               <button className={styles.botao} onClick={() => selecionarCanal(canal)}>
                 <div className={styles.carImg}>
-                  <Image
-                    src={canal.imagem}
-                    alt={canal.nome}
-                    className={styles.modificaImg}
-                    width={50}
-                    height={50}
-                  />
+                 <img
+  src={canal.imagem}
+  alt={canal.nome}
+  className={styles.modificaImg}
+  width={50}
+  height={50}
+  style={{ objectFit: "cover", borderRadius: "10px" }}
+  onError={(e) => {
+    e.target.src = "https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/default_canal.png";
+  }}
+/>
+
                 </div>
                 <p>{canal.nome}</p>
               </button>
