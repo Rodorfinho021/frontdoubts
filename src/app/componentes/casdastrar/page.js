@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState } from "react";
-import styles from "./page.module.css"; // Import do CSS Module
+import styles from "./page.module.css";
 
 const Page = () => {
     const [username, setUsername] = useState("");
@@ -9,15 +9,14 @@ const Page = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
 
-    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
-    
+
         if (password !== confirmPassword) {
             alert("As senhas não coincidem.");
             return;
         }
-    
+
         try {
             const response = await fetch("https://apidoubts.dev.vilhena.ifro.edu.br/cadastro", {
                 method: "POST",
@@ -30,21 +29,23 @@ const Page = () => {
                     senha: password,
                 }),
             });
-    
-            const data = await response.text();
-    
+
+            const data = await response.json();
+
             if (response.ok) {
                 alert("Cadastro realizado com sucesso!");
                 window.location.href = "/componentes/login";
             } else {
-                alert(`Erro ao cadastrar: ${data}`);
+                if (data.mensagem?.includes("já cadastrado")) {
+                    alert(data.mensagem);
+                } else {
+                    alert(`Erro ao cadastrar: ${data.mensagem || "Erro desconhecido"}`);
+                }
             }
         } catch (error) {
-            console.error("Erro na requisição:", error);
-            alert("Erro ao conectar com o servidor.");
+            alert("Erro de conexão com o servidor.");
         }
-    };
-    
+    }; // <- Aqui fecha corretamente o handleSubmit
 
     return (
         <div className={styles.container}>

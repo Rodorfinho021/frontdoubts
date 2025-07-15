@@ -37,7 +37,7 @@ const AparenciaPage = () => {
             <div className={styles.sidebar}>
                 <ul>
                     <li><a className={styles.links} href="/componentes/minha-conta">Minha Conta</a></li>
-                    <li><a className={styles.links} href="/componentes/notificaoes"> Notificações</a></li>
+                    <li><a className={styles.links} href="/componentes/confignotificaoes"> Notificações</a></li>
                     <li><a className={styles.links} href=""> Aparência</a></li>
                 </ul>
             </div>

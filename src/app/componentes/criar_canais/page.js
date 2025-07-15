@@ -3,12 +3,21 @@
 import { useState } from 'react';
 import styles from './page.module.css';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
+
+
+
+
+
 
 const CriarCanais = () => {
+  const router = useRouter();
   const [nomeCanal, setNomeCanal] = useState('');
   const [descricao, setDescricao] = useState('');
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
+  const [loading, setLoading] = useState(false);
+
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
@@ -19,41 +28,59 @@ const CriarCanais = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!file || !nomeCanal || !descricao) {
-      alert('Preencha todos os campos e selecione uma imagem.');
-      return;
-    }
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const formData = new FormData();
-    formData.append('imagem', file);
-    formData.append('nome', nomeCanal);
-    formData.append('descricao', descricao);
+  if (loading) return; // impede cliques múltiplos
 
-    try {
-      await axios.post('https://apidoubts.dev.vilhena.ifro.edu.br/_cadastrar_canal', formData, {
+  if (!file || !nomeCanal || !descricao) {
+    alert('Preencha todos os campos e selecione uma imagem.');
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+  if (!token) {
+    alert("Você precisa estar logado para criar um canal.");
+    return;
+  }
+
+  setLoading(true); // começa a carregar
+
+  const formData = new FormData();
+  formData.append('imagem', file);
+  formData.append('nome', nomeCanal);
+  formData.append('descricao', descricao);
+
+  try {
+    const response = await axios.post(
+      'https://apidoubts.dev.vilhena.ifro.edu.br/_cadastrar_canal',
+      formData,
+      {
         headers: {
-          'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'multipart/form-data'
+        }
+      }
+    );
+
+    const canalCriado = response.data;
+    localStorage.setItem("canalSelecionado", JSON.stringify(canalCriado));
+    router.push("https://apidoubts.dev.vilhena.ifro.edu.br/");
+    
+    // Limpa campos
+    setNomeCanal('');
+    setDescricao('');
+    setFile(null);
+    setPreview(null);
+  } catch (error) {
+    console.error('Erro ao criar canal:', error.response?.data || error.message);
+    alert('Erro ao criar canal');
+  } finally {
+    setLoading(false); // fim do carregamento
+  }
+};
 
 
-  
-      
-
-      alert('Canal criado com sucesso!');
-      // Limpar campos após o cadastro
-      setNomeCanal('');
-      setDescricao('');
-      setFile(null);
-      setPreview(null);
-    } catch (error) {
-      console.error('Erro ao criar canal:', error);
-      alert('Erro ao criar canal');
-    }
-  };
 
   return (
     <div className={styles.container}>

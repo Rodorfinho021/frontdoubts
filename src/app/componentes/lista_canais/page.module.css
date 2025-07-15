@@ -29,8 +29,8 @@
   .carde {
     display: flex;
     align-items: center;
-    width: 100%;
-    margin-bottom: 10px;
+    height: 65px; /* ajuste para o que ficar melhor */
+    margin-bottom: 15px;
     transition: transform 0.3s ease;
   }
   
@@ -104,13 +104,12 @@
   }
   
   .logo {
-    max-width: 80%;
-    height: 300px;
-    width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border-radius: 50%;
     border: 3px solid #35424a;
-    margin-top: auto;
-    margin-bottom: 200px;
+
   }
   
   .iconeConteiner {
@@ -148,3 +147,216 @@
     text-decoration: underline;
   }
   
+
+
+
+
+
+
+.topBarContent {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.topBarImage {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid white;
+}
+
+.topBarTitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0;
+}
+
+
+.listaCanais {
+  width: 100%;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #888 transparent;
+}
+
+.listaCanais::-webkit-scrollbar {
+  width: 6px;
+}
+
+.listaCanais::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+.listaCanais::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+
+.topBar {
+  position: fixed;
+  top: 0;
+  left: 300px;
+  right: 0;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* para empurrar engrenagem à direita */
+  padding: 0 20px;
+  z-index: 100;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.topBarGear {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  border-radius: 5px;
+  transition: background-color 0.2s;
+}
+
+.topBarGear:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Popup do canal - AUMENTADO */
+.menuCanal {
+  position: absolute;
+  top: 70px;
+  right: 30px;
+  background-color: rgba(0, 0, 0, 0.95);
+  border-radius: 15px;
+  padding: 30px;
+  width: 350px;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: white;
+  border: 2px solid #666;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+}
+
+.menuImagem {
+  border-radius: 50%;
+  border: 3px solid white;
+  margin-bottom: 20px;
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+}
+
+.menuNome {
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 25px;
+  text-align: center;
+}
+
+.menuBotaoSair {
+  background-color: #e63946;
+  border: none;
+  padding: 14px 28px;
+  border-radius: 12px;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 17px;
+  transition: background-color 0.3s ease;
+}
+
+.menuBotaoSair:hover {
+  background-color: #b71c1c;
+}
+
+.mensagensContainer {
+  position: absolute;
+  top: 60px; /* altura da topBar */
+  left: 300px; /* largura da sidebar */
+  right: 0;
+  bottom: 80px; /* espaço para a barra de digitação */
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+
+.menuCanal {
+  position: absolute;
+  top: 50px; /* Ajuste conforme seu layout */
+  right: 10px;
+  background-color: #222; /* fundo escuro */
+  border-radius: 12px;
+  padding: 20px;
+  width: 280px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.7);
+  z-index: 100;
+  display: flex;
+  justify-content: center; /* centraliza o conteúdo horizontal */
+}
+
+.menuCanalContent {
+  text-align: center;
+  width: 100%;
+}
+
+.menuImagem {
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 10px;
+  border: 2px solid #555;
+}
+
+.menuNome {
+  font-size: 1.5rem;
+  color: white;
+  margin: 0;
+  margin-bottom: 6px;
+}
+
+.menuDescricao {
+  font-size: 1rem;
+  color: #bbb;
+  margin-bottom: 15px;
+  min-height: 40px; /* evita salto se não tiver descrição */
+}
+
+.menuBotaoSair,
+.menuBotaoDeletar {
+  width: 100%;
+  padding: 10px 0;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  margin-top: 10px;
+}
+
+.menuBotaoSair {
+  background-color: #444;
+  color: white;
+}
+
+.menuBotaoSair:hover {
+  background-color: #666;
+}
+
+.menuBotaoDeletar {
+  background-color: #d93025; /* vermelho forte */
+  color: white;
+}
+
+.menuBotaoDeletar:hover {
+  background-color: #a52714; /* vermelho mais escuro */
+}
