@@ -268,7 +268,7 @@ useEffect(() => {
   className={styles.modificaImg}
   width={50}
   height={50}
-  style={{ objectFit: "cover", borderRadius: "10px" }}
+  style={{ objectFit: "cover", borderRadius: "50px" }}
   onError={(e) => {
     e.target.src = "https://apidoubts.dev.vilhena.ifro.edu.br/uploads_canais/default_canal.png";
   }}
