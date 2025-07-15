@@ -305,14 +305,12 @@ useEffect(() => {
           <div key={index} className={styles.mensagem} style={{ marginBottom: '15px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
               {/* Imagem do perfil do autor */}
-<Image
-  src={`https://apidoubts.dev.vilhena.ifro.edu.br/uploads/${msg.foto_url || 'default_user.png'}`}
-  alt={`Foto de ${msg.autor}`}
-  width={40}
-  height={40}
-  style={{ borderRadius: '50%', objectFit: 'cover' }}
-/>
-
+              <img
+                src={`https://apidoubts.dev.vilhena.ifro.edu.br/uploads/${msg.foto_url || 'default_user.png'}`}
+                alt={`Foto de ${msg.autor}`}
+                style={{ width: 40, height: 40, borderRadius: '50%', objectFit: 'cover' }}
+                onError={(e) => { e.target.src = 'https://apidoubts.dev.vilhena.ifro.edu.br/uploads/default.png'; }}
+              />
               <div>
                 {/* Nome do autor e horário formatado */}
                 <strong style={{ color: 'white' }}>{msg.autor}</strong>{' '}
@@ -532,16 +530,13 @@ useEffect(() => {
 )}
     
                   {/* Imagem enviada na mensagem */}
-{msg.imagem_url && (
-  <Image
+                {msg.imagem_url && (
+  <img
     src={`https://apidoubts.dev.vilhena.ifro.edu.br/uploads_mensagens/${msg.imagem_url}`}
     alt="imagem da mensagem"
-    width={500}
-    height={300}
-    style={{ objectFit: "contain", maxWidth: "100%", height: "auto" }}
+    style={{ maxWidth: '100%', maxHeight: '300px' }}
   />
 )}
-
 
                 </div>
               </div>
