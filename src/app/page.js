@@ -215,7 +215,7 @@ const canaisFiltrados = canais.filter((canal) =>
       </p>
 
       <div className={styles.filtrosTitulos}>
-        <h2>Filtros:</h2>
+        <h2>Canais:</h2>
       </div>
 
       <div className={styles.filtros}>
