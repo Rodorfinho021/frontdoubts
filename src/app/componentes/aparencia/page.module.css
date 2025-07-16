@@ -124,3 +124,22 @@ input:checked + .slider {
 input:checked + .slider:before {
   transform: translateX(25px);
 }
+
+
+/* Exemplo */
+body.dark-mode .sidebar {
+  background-color: #1e1e1e;
+}
+
+.body.light-mode .container {
+  background-color: #e0e0e0;
+}
+
+
+.body.light-mode .container {
+  font-family: Arial, sans-serif;
+  background-image: linear-gradient(blue);
+  display: flex;
+  height: 100vh;
+  color: white;
+}

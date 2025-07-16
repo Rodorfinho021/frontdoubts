@@ -4,58 +4,55 @@ import styles from './page.module.css';
 import Link from 'next/link';
 import Image from 'next/image';
 
-// resto do seu código...
-
-
 const Notificacoes = () => {
   const [notificacoes, setNotificacoes] = useState([]);
 
-  useEffect(() => {
-    const buscarNotificacoes = async () => {
-      try {
-        const response = await fetch('https://apidoubts.dev.vilhena.ifro.edu.br/amizade/notificacoes', {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`
-          }
-        });
+useEffect(() => {
+  const buscarNotificacoes = async () => {
+    try {
+      const token = localStorage.getItem("token");
 
-        const data = await response.json();
+      const [amizadeRes, canaisRes] = await Promise.all([
+        fetch('https://apidoubts.dev.vilhena.ifro.edu.br/amizade/notificacoes', {
+          headers: { Authorization: `Bearer ${token}` }
+        }),
+        fetch('https://apidoubts.dev.vilhena.ifro.edu.br/notificacoes/canais', {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+      ]);
 
-        // Filtrar notificações repetidas por remetente, mantendo a mais recente
-        // Supondo que cada notificação tem 'remetente_id' e 'created_at' (ou algum campo que indica data)
-        // Se não tiver, mantém a primeira que aparecer
-        const notificacoesFiltradas = [];
-        const remetentesMap = new Map();
+      const amizadeData = await amizadeRes.json();
+      const canaisData = await canaisRes.json();
 
-        data.forEach((notif) => {
-          const remetenteId = notif.remetente_id || notif.usuario_id || notif.id; // ajuste conforme seu campo
-          const existente = remetentesMap.get(remetenteId);
+      // Unifica os dois tipos de notificações
+      const todasNotificacoes = [...amizadeData, ...canaisData];
 
-          if (!existente) {
-            remetentesMap.set(remetenteId, notif);
-          } else {
-            // Se tiver data, pode comparar e substituir o antigo pela mais recente
-            // Aqui um exemplo simples assumindo campo created_at (ISO string)
-            if (notif.created_at && existente.created_at) {
-              if (new Date(notif.created_at) > new Date(existente.created_at)) {
-                remetentesMap.set(remetenteId, notif);
-              }
-            }
-            // Se não tiver created_at, manter o primeiro e ignorar os seguintes
-          }
-        });
+      // Filtro por remetente mais recente (se quiser manter)
+      const notificacoesFiltradas = [];
+      const remetentesMap = new Map();
 
-        remetentesMap.forEach((value) => notificacoesFiltradas.push(value));
+      todasNotificacoes.forEach((notif) => {
+        const remetenteId = notif.remetente_id || notif.usuario_id || notif.id;
+        const existente = remetentesMap.get(remetenteId);
 
-        setNotificacoes(notificacoesFiltradas);
-      } catch (error) {
-        console.error('Erro ao buscar notificações:', error);
-      }
-    };
+        if (!existente || (notif.created_at && existente.created_at && new Date(notif.created_at) > new Date(existente.created_at))) {
+          remetentesMap.set(remetenteId, notif);
+        }
+      });
 
-    buscarNotificacoes();
-  }, []);
+      remetentesMap.forEach((value) => notificacoesFiltradas.push(value));
+      setNotificacoes(notificacoesFiltradas);
+    } catch (error) {
+      console.error('Erro ao buscar notificações:', error);
+    }
+  };
 
+  buscarNotificacoes();
+}, []);
+
+
+
+  // Responder solicitação de amizade
   const responderSolicitacao = async (id, acao) => {
     try {
       const response = await fetch('https://apidoubts.dev.vilhena.ifro.edu.br/amizade/responder', {
@@ -70,13 +67,48 @@ const Notificacoes = () => {
       const data = await response.json();
       alert(data.mensagem);
 
-      // Remove a notificação da lista após resposta
       setNotificacoes(prev => prev.filter(n => n.id !== id));
     } catch (error) {
       console.error('Erro ao responder solicitação:', error);
       alert('Erro ao responder solicitação.');
     }
   };
+
+  // Responder convite para compartilhar canal
+const responderCompartilhamento = async (id, acao) => {
+  try {
+    const response = await fetch('https://apidoubts.dev.vilhena.ifro.edu.br/responder_compartilhamento', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      },
+      body: JSON.stringify({ id, acao })
+    });
+
+    const data = await response.json();
+
+    if (acao === 'aceitar') {
+      if (data.ja_participa) {
+        alert(data.mensagem || 'Você já participa deste canal.');
+      } else {
+        alert(data.mensagem || 'Você entrou no canal.');
+        if (data.canal_id) {
+          router.push(`/componentes/canais/${data.canal_id}`);
+        }
+      }
+    } else {
+      alert(data.mensagem || 'Convite ignorado.');
+    }
+
+    // Remover notificação após ação
+    setNotificacoes(prev => prev.filter(n => n.id !== id));
+  } catch (error) {
+    console.error('Erro ao responder compartilhamento:', error);
+    alert('Erro ao responder convite do canal.');
+  }
+};
+
 
   return (
     <section className={styles.bodyMain}>
@@ -113,6 +145,7 @@ const Notificacoes = () => {
             notificacoes.map((notificacao) => (
               <div key={notificacao.id} className={styles.notificacao}>
                 <span>{notificacao.mensagem}</span>
+
                 {notificacao.tipo === 'amizade' && (
                   <div className={styles.botoes}>
                     <button
@@ -129,6 +162,23 @@ const Notificacoes = () => {
                     </button>
                   </div>
                 )}
+                  {notificacao.tipo === 'compartilhamento_canal' && (
+  <div className={styles.botoes}>
+    <button
+      className={styles.aceitar}
+      onClick={() => responderCompartilhamento(notificacao.id, 'aceitar')}
+    >
+      Entrar
+    </button>
+    <button
+      className={styles.recusar}
+      onClick={() => responderCompartilhamento(notificacao.id, 'recusar')}
+    >
+      Ignorar
+    </button>
+  </div>
+)}
+
               </div>
             ))
           )}

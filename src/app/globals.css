@@ -19,3 +19,33 @@ html, body {
   height: 100%;
   overflow-x: hidden;
 }
+
+/* Globalmente */
+body.original-mode {
+  background-color: white;
+  color: black;
+}
+
+body.light-mode {
+  background-color: #f9f9f9;
+  color: #111;
+}
+
+body.dark-mode {
+  background-color: #111;
+  color: #f9f9f9;
+}
+
+/* Exemplo: muda sidebar com base no tema */
+body.light-mode .sidebar {
+  background-color: #e1e1e1;
+}
+
+body.dark-mode .sidebar {
+  background-color: #222;
+}
+
+/* Exemplo de ajustes de componentes */
+.sidebar {
+  background-color: inherit;
+}

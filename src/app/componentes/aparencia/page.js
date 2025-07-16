@@ -1,30 +1,16 @@
 'use client';
 
-import React, { useState } from "react";
-import styles from "./page.module.css"; 
+import React, { useEffect, useState } from "react";
+import styles from "./page.module.css";
 
 const AparenciaPage = () => {
-    const [originalMode, setOriginalMode] = useState(true);
-    const [lightMode, setLightMode] = useState(false);
-    const [darkMode, setDarkMode] = useState(false);
+    const [theme, setTheme] = useState('original');
 
-    const handleOriginalModeChange = () => {
-        setOriginalMode(!originalMode);
-        setLightMode(false);
-        setDarkMode(false);
-    };
 
-    const handleLightModeChange = () => {
-        setLightMode(!lightMode);
-        setOriginalMode(false);
-        setDarkMode(false);
-    };
-
-    const handleDarkModeChange = () => {
-        setDarkMode(!darkMode);
-        setOriginalMode(false);
-        setLightMode(false);
-    };
+    useEffect(() => {
+        document.body.classList.remove('original-mode', 'light-mode', 'dark-mode');
+        document.body.classList.add(`${theme}-mode`);
+    }, [theme]);
 
     return (
         <div className={styles.container}>
@@ -44,31 +30,34 @@ const AparenciaPage = () => {
 
             <div className={styles.pai}>
                 <div className={styles.content}>
-                    <h2 className={styles.h2} >Configurações de Aparência</h2>
+                    <h2 className={styles.h2}>Configurações de Aparência</h2>
+
                     <label className={styles.switch}>
                         Modo original
                         <input
                             type="checkbox"
-                            checked={originalMode}
-                            onChange={handleOriginalModeChange}
+                            checked={theme === 'original'}
+                            onChange={() => setTheme('original')}
                         />
                         <span className={styles.slider}></span>
                     </label>
+
                     <label className={styles.switch}>
                         Modo claro
                         <input
                             type="checkbox"
-                            checked={lightMode}
-                            onChange={handleLightModeChange}
+                            checked={theme === 'light'}
+                            onChange={() => setTheme('light')}
                         />
                         <span className={styles.slider}></span>
                     </label>
+
                     <label className={styles.switch}>
                         Modo escuro
                         <input
                             type="checkbox"
-                            checked={darkMode}
-                            onChange={handleDarkModeChange}
+                            checked={theme === 'dark'}
+                            onChange={() => setTheme('dark')}
                         />
                         <span className={styles.slider}></span>
                     </label>

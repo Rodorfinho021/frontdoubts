@@ -201,7 +201,7 @@
   left: 300px;
   right: 0;
   height: 60px;
-  background-color: rgba(0, 0, 0, 0.7);
+background-image: linear-gradient(to left, #6d116d, #000 100%);
   color: white;
   display: flex;
   align-items: center;
@@ -359,4 +359,71 @@
 
 .menuBotaoDeletar:hover {
   background-color: #a52714; /* vermelho mais escuro */
+}
+
+.botaoSalvar {
+  background-color: #4CAF50; /* verde */
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.botaoSalvar:hover {
+  background-color: #45a049;
+}
+
+.botaoCancelar {
+  background-color: #777;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top: 8px;
+  transition: background-color 0.3s ease;
+}
+
+.botaoCancelar:hover {
+  background-color: #555;
+}
+
+
+
+.previewContainer {
+  margin: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.previewImage {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+.menuBotaoCompartilhar {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+.menuBotaoCompartilhar:hover {
+  background-color: #2563eb;
 }
