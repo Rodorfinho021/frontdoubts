@@ -123,34 +123,33 @@
       buscarMensagens(canal.id);
     };
 
-    const enviarMensagem = async () => {
-      if (!mensagem.trim() && !imagem) return;
-      if (!canalSelecionado) return;
+const enviarMensagem = async () => {
+  if (!mensagem.trim()) return;
+  if (!canalSelecionado) return;
 
-      const token = localStorage.getItem("token");
-      if (!token) return;
+  const token = localStorage.getItem("token");
+  if (!token) return;
 
-      const formData = new FormData();
-      formData.append("mensagem", mensagem);
-      if (imagem) formData.append("imagem", imagem);
+  try {
+    const res = await fetch(`https://apidoubts.dev.vilhena.ifro.edu.br/canais/${canalSelecionado.id}/mensagem`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ mensagem }),
+    });
 
-      try {
-        const res = await fetch(`https://apidoubts.dev.vilhena.ifro.edu.br/canais/${canalSelecionado.id}/mensagem`, {
-          method: "POST",
-          headers: { Authorization: `Bearer ${token}` },
-          body: formData,
-        });
+    if (!res.ok) throw new Error("Erro ao enviar mensagem");
 
-        if (!res.ok) throw new Error("Erro ao enviar mensagem");
+    setMensagem("");
+    buscarMensagens(canalSelecionado.id);
+  } catch (err) {
+    console.error("Erro ao enviar:", err);
+    alert("Erro ao enviar mensagem.");
+  }
+};
 
-        setMensagem("");
-        setImagem(null);
-        buscarMensagens(canalSelecionado.id);
-      } catch (err) {
-        console.error("Erro ao enviar:", err);
-        alert("Erro ao enviar mensagem.");
-      }
-    };
 
     const handleKeyDown = (e) => {
       if (e.key === "Enter") enviarMensagem();
@@ -448,10 +447,10 @@
           <Image className={styles.logo} src="/logo.jpeg" alt="Logo" width={200} height={200} />
 
           <div className={styles.iconeConteiner}>
-            <Link href="/componentes/aparencia">
+            <Link href="/componentes/confignotificaoes">
               <Image src="/engrenagem.png" alt="Configuração" className={styles.icone} width={40} height={40} />
             </Link>
-            <Link href="/componentes/notificaoes">
+            <Link href="/componentes/notificacaoes">
               <Image src="/sino.png" alt="Notificações" className={styles.icone} width={40} height={40} />
             </Link>
             <Link href="/">
@@ -731,12 +730,7 @@
             onChange={(e) => setMensagem(e.target.value)}
             onKeyDown={handleKeyDown} // Use onKeyDown
           />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImagem(e.target.files[0])}
-            style={{ marginRight: "10px" }}
-          />
+
           <button className={styles.botaoEnviar} onClick={enviarMensagem}>
             Enviar
           </button>

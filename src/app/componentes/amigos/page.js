@@ -17,6 +17,14 @@ const ChatInterface = () => {
   const mensagensFimRef = useRef(null);
   const containerChatRef = useRef(null); // ref do container das mensagens
   const [scrollInicial, setScrollInicial] = useState(false);
+const [busca, setBusca] = useState('');
+
+
+
+const amigosFiltrados = amigos.filter((amigo) =>
+  amigo.nome.toLowerCase().includes(busca.toLowerCase())
+);
+
 
   // Scroll para o fim normal (usado só no carregamento inicial)
   const scrollParaFim = () => {
@@ -194,20 +202,27 @@ useEffect(() => {
           </div>
           <div className={styles.icons}>
             <div className={styles.iconContainer}>
-              <Link href="/componentes/notificaamizada">
+              <Link href="/componentes/notificacaoes">
                 <Image src="/notificacao.png" alt="Notificações" width={55} height={55} className={styles.voltar_botao} />
               </Link>
               <Link href="/componentes/adicionaramg">
                 <Image src="/mais.png" alt="Adicionar" width={55} height={55} className={styles.voltar_botao} />
               </Link>
-              <Link href="../html/aparéncia.html">
+              <Link href="/componentes/confignotificaoes">
                 <Image src="/engrenagem.png" alt="Configurações" width={55} height={55} className={styles.voltar_botao} />
               </Link>
             </div>
           </div>
         </header>
 
-        <input type="text" className={styles.search} placeholder="Pesquisar" />
+      <input
+  type="text"
+  className={styles.search}
+  placeholder="Pesquisar"
+  value={busca}
+  onChange={(e) => setBusca(e.target.value)}
+/>
+
 
         <div className={styles.friendsHeader}>
           <h2>Meus Amigos</h2>
@@ -240,10 +255,10 @@ useEffect(() => {
         </div>
 
         <section className={styles.friends}>
-          {amigos.length === 0 ? (
-            <p style={{ color: 'white' }}>Você ainda não tem amigos.</p>
-          ) : (
-            amigos.map((amigo) => (
+{amigosFiltrados.length === 0 ? (
+  <p style={{ color: 'white' }}>Nenhum amigo encontrado.</p>
+) : (
+  amigosFiltrados.map((amigo) => (
               <div
                 key={amigo.id}
                 className={styles.friend}

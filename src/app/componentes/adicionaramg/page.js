@@ -127,14 +127,14 @@ const AdicionarAmigos = () => {
         </div>
 
         <nav className={styles.menu}>
-          <Link className={styles.link} href="#">
+          <Link className={styles.link} href="/componentes/minha-conta">
             <p>Minha Conta</p>
           </Link>
-          <Link className={styles.link} href="#">
+          <Link className={styles.link} href="/componentes/notificacaoes">
             <p>Notificações</p>
           </Link>
-          <Link className={styles.link} href="#">
-            <p>Aparência</p>
+          <Link className={styles.link} href="/componentes/confignotificaoes">
+            <p>Configurações</p>
           </Link>
         </nav>
 
@@ -149,7 +149,7 @@ const AdicionarAmigos = () => {
             />
           </Link>
 
-          <Link href="/componentes/aparencia">
+          <Link href="/componentes/confignotificaoes">
             <Image
               src="/engrenagem.png"
               alt="Voltar"
@@ -159,7 +159,7 @@ const AdicionarAmigos = () => {
             />
           </Link>
 
-          <Link href="../html/aparéncia.html">
+          <Link href="/componentes/notificacaoes">
             <Image
               src="/sino.png"
               alt="Voltar"

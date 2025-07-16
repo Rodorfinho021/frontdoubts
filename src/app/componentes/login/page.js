@@ -94,9 +94,6 @@
                         />
                     </div>
                     <button type="submit" className={styles.submitButton}>Entrar</button>
-                    <div className={styles.forgotPassword}>
-                        <a href="/componentes/trocar-senha">Esqueceu a senha?</a>
-                    </div>
                     <div className={styles.register}>
                         <a href="/componentes/casdastrar">Cadastrar-se</a>
                     </div>

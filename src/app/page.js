@@ -178,7 +178,7 @@ const canaisFiltrados = canais.filter((canal) =>
         </div>
 
         <div className={styles.iconeConteiner}>
-          <Link href="/componentes/aparencia">
+          <Link href="/componentes/confignotificaoes">
             <Image src="/simbolo-de-interface-da-roda-dentada-de-configuracao.png" alt="Configuração" className={styles.icone} width={40} height={40} />
           </Link>
           <Link href="/componentes/notificacaoes">
